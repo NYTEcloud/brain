@@ -17,7 +17,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://brain.telonyte.com"
 Documentation = "https://brain.telonyte.com/setup/api"
-Source = "https://github.com/Telonyte/brain"
+Source = "https://github.com/NYTEcloud/brain"
 
 [tool.setuptools.packages.find]
 where = ["src"]

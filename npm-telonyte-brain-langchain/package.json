@@ -21,7 +21,7 @@
   "homepage": "https://brain.telonyte.com",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Telonyte/brain.git",
+    "url": "git+https://github.com/NYTEcloud/brain.git",
     "directory": "npm-telonyte-brain-langchain"
   },
   "dependencies": {
