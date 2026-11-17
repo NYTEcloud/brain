@@ -1,0 +1,21 @@
+# Code owners
+#
+# Lanes, per Kyle on Nov 17, 2026:
+# - Design (UI, styling, layout, visual components, look of copy):
+#   Romina Chale (romina@telonyte.com, GitHub @romina-ch) and her Grok bots
+# - Functionality and features (APIs, data, auth, agents, scans, logic):
+#   Kyle and his bots (Emperor Lightbraker and the team bots)
+#
+# Verified GitHub usernames:
+#   Kyle's lane: @kyledetwieler @kyle-telonyte
+#   Design lane: @romina-ch (NYTEcloud org Owner)
+#
+# The GitHub org is https://github.com/NYTEcloud
+#
+# Last matching path wins. Design paths below override the default.
+
+# Default: functionality and features (Kyle)
+* @kyledetwieler @kyle-telonyte
+
+# No design-path directories in this repo yet. When UI, styles,
+# assets, or templates are added, map them to @romina-ch here.
