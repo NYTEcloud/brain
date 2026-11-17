@@ -1,0 +1,14 @@
+[project]
+name = "telonyte-brain"
+version = "2.2.6"
+description = "B.R.A.I.N. V1 client for Python: HTTP API plus a local synced copy for Hyper speed lookups."
+requires-python = ">=3.9"
+readme = "README.md"
+[project.urls]
+Homepage = "https://brain.telonyte.com"
+Documentation = "https://brain.telonyte.com/setup/api"
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+[tool.setuptools.packages.find]
+where = ["src"]

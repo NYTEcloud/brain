@@ -1,0 +1,27 @@
+# secrets and env
+.env
+.env.*
+!.env.example
+.dev.vars
+*.pem
+*.p12
+*.key
+keys.json
+**/secrets/
+.circuit_cred_key
+.circuit_cred_key.b64
+CIRCUIT_CRED_KEY.b64
+access_service_token.json
+
+# tooling / deps
+node_modules/
+.wrangler/
+__pycache__/
+*.pyc
+.DS_Store
+.venv/
+venv/
+
+# archives and local logs
+*.zip
+*.log

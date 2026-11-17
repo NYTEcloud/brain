@@ -1,0 +1,33 @@
+{
+  "name": "@telonyte/brain-langchain",
+  "version": "2.2.6",
+  "description": "LangChain retriever adapter for B.R.A.I.N. V1.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED",
+  "private": false,
+  "homepage": "https://brain.telonyte.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Telonyte/brain.git",
+    "directory": "npm-telonyte-brain-langchain"
+  },
+  "dependencies": {
+    "@telonyte/brain": "^2.2.6"
+  },
+  "peerDependencies": {
+    "@langchain/core": ">=0.3.0"
+  }
+}
