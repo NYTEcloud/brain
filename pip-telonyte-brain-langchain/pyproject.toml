@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "telonyte-brain-langchain"
-version = "2.2.6"
+version = "2.2.7"
 description = "LangChain retriever adapter for B.R.A.I.N. V1."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "UNLICENSED" }
 dependencies = [
-  "telonyte-brain>=2.2.6",
+  "telonyte-brain>=2.2.7",
   "langchain-core>=0.3",
 ]
 

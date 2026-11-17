@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-export const VERSION = "2.2.6";
+export const VERSION = "2.2.7";
 export const UA = `telonyte-brain-js/${VERSION}`;
 export const DEFAULT_URL = "https://brain.telonyte.com";
 export const FRESH_MS = 120_000; // answer locally while the last successful host contact is younger than this

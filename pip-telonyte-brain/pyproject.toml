@@ -1,6 +1,6 @@
 [project]
 name = "telonyte-brain"
-version = "2.2.6"
+version = "2.2.7"
 description = "B.R.A.I.N. V1 client for Python: HTTP API plus a local synced copy for Hyper speed lookups."
 requires-python = ">=3.9"
 readme = "README.md"

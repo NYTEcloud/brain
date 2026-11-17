@@ -1252,22 +1252,18 @@ def _is_status_query(qwords):  # tenant.ts isStatusQuery()
     return any(w in _STATUS_WORDS or _stem(w) in _STATUS_WORDS for w in qwords)
 
 _SUBJECT_CANON = [(_jsre(p, re.I), c) for p, c in [
-    (r"smart\s*hands\s*v2 live", "smarthands-live"),
-    (r"sitemap\s*resubmit", "smarthands-sitemap"),
-    (r"always use https|www redirect and always", "smarthandstn-https"),
-    (r"smarthandstn\.com.*(?:www|redirect)|(?:www|redirect).*smarthandstn", "smarthandstn-www"),
+    (r"sitemap\s*resubmit", "sitemap-resubmit"),
+    (r"always use https|www redirect and always", "https-always"),
     (r"pages\s*edit\s*(?:token|credential)|cloudflare\s+pages\s+edit", "cf-pages-edit"),
     (r"brain\s*v2.*sheets|sheets\s*migration", "brain-sheets"),
     (r"service-locations\s*404", "svc-404"),
     (r"hosted\s*b\.r\.a\.i\.n\. plan", "brain-hosted-plan"),
     (r"b\.r\.a\.i\.n\.\s*stands|bot recall artificial", "brain-acronym"),
     (r"let'?s call this brain v2|exact words:.*brain v2", "brain-naming"),
-    (r"itdeploy\.com.*godaddy|until after", "itdeploy-ns"),
     (r"tracking foundation csp|csp relax", "tracking-csp"),
     (r"tracking foundation(?! csp)|ga4 property", "tracking-foundation"),
-    (r"privateitsupport|email swap", "pits-email-swap"),
-    (r"kind__c|signup attempt", "signup-kindc"),
-    (r"vince.*concept review", "vince-concept"),
+    (r"email swap", "email-swap"),
+    (r"signup attempt", "signup-attempt"),
     (r"godaddy|godady|registrar", "domain-registrar"),
 ]]
 _TYPO_FIX = {
@@ -1275,7 +1271,7 @@ _TYPO_FIX = {
     "shets": "sheets", "migraton": "migration", "aproval": "approval", "aproved": "approved",
     "redrect": "redirect", "htps": "https", "servce": "service", "locatons": "locations",
     "stylng": "styling", "releas": "release", "godady": "godaddy",
-    "privatitsupport": "privateitsupport", "swapp": "swap", "kindc": "kind__c", "capp": "cap",
+    "swapp": "swap", "capp": "cap",
 }
 _ET_HEX = _jsre(r"\b[0-9a-f]{7,10}\b")
 _ET_LIVE = _jsre(r"\blive\b")
@@ -1284,10 +1280,6 @@ def _enrich_tags(text, tags=""):  # tenant.ts enrichTags() (used by a local add 
     low = (text or "").lower()
     extra = []
     for needle, bits in [
-        ("smarthands", ["smart", "hands"]),
-        ("smarthandstn", ["smart", "hands", "smarthandstn.com"]),
-        ("privateitsupport", ["privateitsupport.com"]),
-        ("itdeploy", ["itdeploy.com"]),
         ("cloudflare", ["cf"]),
         ("nameservers", ["ns"]),
     ]:
@@ -1304,7 +1296,7 @@ def _enrich_tags(text, tags=""):  # tenant.ts enrichTags() (used by a local add 
     if "pending:" in low or "still pending" in low:
         extra.extend(["pending", "not-done"])
     if "exact words" in low or "let's call" in low:
-        extra.extend(["naming", "exact-words", "kyle-said"])
+        extra.extend(["naming", "exact-words"])
     if "always use https" in low:
         extra.extend(["https", "www", "redirect", "on-card"])
     if "ga4" in low:
@@ -1318,7 +1310,7 @@ def _enrich_tags(text, tags=""):  # tenant.ts enrichTags() (used by a local add 
     merged = _dedupe([t for t in re.split(_WS, tags or "") if t] + extra)
     return {"tags": " ".join(merged), "subject": subject}
 
-_RQ_SMART = _jsre(r"\bsmarthands?\b")
+_RQ_CARD = _jsre(r"\b\w+'s card\b")
 
 def _rewrite_query(q):  # tenant.ts rewriteQuery()
     ql = q.lower()
@@ -1330,22 +1322,20 @@ def _rewrite_query(q):  # tenant.ts rewriteQuery()
     base = _terms(ql)
     for w in base:
         extra.extend(_ALIASES.get(w, []))
-    if _RQ_SMART.search(ql) and "smart" not in ql:
-        extra.extend(["smart", "hands"])
     if "always use https" in ql or "https" in ql:
-        extra.extend(["smarthandstn", "redirect"])
+        extra.extend(["redirect"])
     if any(x in ql for x in ("not done", "not finished", "still not", "not fixed")):
         extra.extend(["pending", "not-done"])
     if "until when" in ql or "until" in ql:
         extra.extend(["until", "dec"])
-    if "on card" in ql or "kyle's card" in ql:
+    if "on card" in ql or _RQ_CARD.search(ql):
         extra.extend(["on-card", "card"])
     if "still open" in ql:
         extra.extend(["still-open", "sitemap", "resubmit"])
     if "product" in ql and ("live" in ql or "deploy" in ql):
-        extra.extend(["smarthands", "smart", "hands", "live"])
+        extra.extend(["live"])
     if "ga4" in ql or "been created" in ql:
-        extra.extend(["ga4", "tracking", "not-created", "waiting_on_kyle"])
+        extra.extend(["ga4", "tracking", "not-created", "waiting-on"])
     seen, expanded = set(), []
     flat = [t for e in extra for t in _terms(e)]
     for t in base + flat + extra:

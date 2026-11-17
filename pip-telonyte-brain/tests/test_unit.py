@@ -130,7 +130,7 @@ class Compat(Base):
         self.assertEqual(sorted(body), ["bot", "cid", "text"])
         self.assertGreaterEqual(len(body["cid"]), 8)
         for s in self.stub.seen:
-            self.assertEqual(s["h"]["user-agent"], "telonyte-brain-py/2.2.6")
+            self.assertEqual(s["h"]["user-agent"], "telonyte-brain-py/2.2.7")
             self.assertEqual(s["h"]["x-brain-hyper"], "host;opted_out")
             self.assertEqual(s["h"]["authorization"], "Bearer k-test")
 
@@ -164,7 +164,7 @@ class Compat(Base):
         self.assertIn("/v1/sync", paths)
         self.assertIn("/v1/sync/ws", paths)
         for s in self.stub.seen:
-            self.assertEqual(s["h"]["user-agent"], "telonyte-brain-py/2.2.6", s["p"])
+            self.assertEqual(s["h"]["user-agent"], "telonyte-brain-py/2.2.7", s["p"])
             mode, reason = s["h"]["x-brain-hyper"].split(";")
             self.assertIn(mode, ("local", "host"))
             self.assertIn(reason, REASONS, s["p"])

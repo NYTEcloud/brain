@@ -24,7 +24,7 @@ from urllib.parse import urlparse
 
 from . import _local
 
-__version__ = "2.2.6"
+__version__ = "2.2.7"
 UA = "telonyte-brain-py/" + __version__
 DEFAULT_URL = "https://brain.telonyte.com"
 

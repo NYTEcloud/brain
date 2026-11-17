@@ -5,8 +5,8 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { VERSION } from "../lib/util.js";
 
-test("package version is 2.2.6", () => {
+test("package version is 2.2.7", () => {
   const pkg = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "package.json"), "utf8"));
-  assert.equal(pkg.version, "2.2.6");
-  assert.equal(VERSION, "2.2.6");
+  assert.equal(pkg.version, "2.2.7");
+  assert.equal(VERSION, "2.2.7");
 });

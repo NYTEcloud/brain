@@ -15,7 +15,7 @@ var SECRET = /(password|passcode|passwd|auth ?code|backup code|\b\d{6}\b|routing
 var STREET = /\b\d{3,6}\s+[A-Z][a-z]+\s+(Rd|St|Ave|Dr|Ln|Ct|Blvd|Way)\b/;
 function refuseSecret(text) {
   if (SECRET.test(text)) return "refused: looks like a secret, code or account number (words like password or token, or any 6-digit number). Nothing was saved; reword it and try again.";
-  if (STREET.test(text) && !text.includes("Old Hickory"))
+  if (STREET.test(text))
     return "refused: looks like a street address. Nothing was saved; reword it and try again.";
   return null;
 }
@@ -26,7 +26,7 @@ function containsSecretValue(text) {
   if (/(password|passwd|passcode|totp(?:\s*secret)?|api[_ -]?key)\s*[=:]\s*\S{6,}/i.test(text)) {
     return "refused: looks like a secret assignment";
   }
-  if (STREET.test(text) && !text.includes("Old Hickory")) return "refused: looks like a street address";
+  if (STREET.test(text)) return "refused: looks like a street address";
   return null;
 }
 
@@ -2447,22 +2447,18 @@ function isStatusQuery(qwords) {
   return qwords.some((w) => STATUS_WORDS.has(w) || STATUS_WORDS.has(stem2(w)));
 }
 var SUBJECT_CANON = [
-  [/smart\s*hands\s*v2 live/i, "smarthands-live"],
-  [/sitemap\s*resubmit/i, "smarthands-sitemap"],
-  [/always use https|www redirect and always/i, "smarthandstn-https"],
-  [/smarthandstn\.com.*(?:www|redirect)|(?:www|redirect).*smarthandstn/i, "smarthandstn-www"],
+  [/sitemap\s*resubmit/i, "sitemap-resubmit"],
+  [/always use https|www redirect and always/i, "https-always"],
   [/pages\s*edit\s*(?:token|credential)|cloudflare\s+pages\s+edit/i, "cf-pages-edit"],
   [/brain\s*v2.*sheets|sheets\s*migration/i, "brain-sheets"],
   [/service-locations\s*404/i, "svc-404"],
   [/hosted\s*b\.r\.a\.i\.n\. plan/i, "brain-hosted-plan"],
   [/b\.r\.a\.i\.n\.\s*stands|bot recall artificial/i, "brain-acronym"],
   [/let'?s call this brain v2|exact words:.*brain v2/i, "brain-naming"],
-  [/itdeploy\.com.*godaddy|until after/i, "itdeploy-ns"],
   [/tracking foundation csp|csp relax/i, "tracking-csp"],
   [/tracking foundation(?! csp)|ga4 property/i, "tracking-foundation"],
-  [/privateitsupport|email swap/i, "pits-email-swap"],
-  [/kind__c|signup attempt/i, "signup-kindc"],
-  [/vince.*concept review/i, "vince-concept"],
+  [/email swap/i, "email-swap"],
+  [/signup attempt/i, "signup-attempt"],
   [/godaddy|godady|registrar/i, "domain-registrar"]
 ];
 var TYPO_FIX = {
@@ -2481,19 +2477,13 @@ var TYPO_FIX = {
   stylng: "styling",
   releas: "release",
   godady: "godaddy",
-  privatitsupport: "privateitsupport",
   swapp: "swap",
-  kindc: "kind__c",
   capp: "cap"
 };
 function enrichTags(text, tags = "") {
   const low = (text || "").toLowerCase();
   const extra = [];
   for (const [needle, bits] of [
-    ["smarthands", ["smart", "hands"]],
-    ["smarthandstn", ["smart", "hands", "smarthandstn.com"]],
-    ["privateitsupport", ["privateitsupport.com"]],
-    ["itdeploy", ["itdeploy.com"]],
     ["cloudflare", ["cf"]],
     ["nameservers", ["ns"]]
   ]) {
@@ -2509,7 +2499,7 @@ function enrichTags(text, tags = "") {
   }
   if (low.includes("deployed:") || /\blive\b/.test(low)) extra.push("deployed", "live");
   if (low.includes("pending:") || low.includes("still pending")) extra.push("pending", "not-done");
-  if (low.includes("exact words") || low.includes("let's call")) extra.push("naming", "exact-words", "kyle-said");
+  if (low.includes("exact words") || low.includes("let's call")) extra.push("naming", "exact-words");
   if (low.includes("always use https")) extra.push("https", "www", "redirect", "on-card");
   if (low.includes("ga4")) extra.push("ga4", "analytics");
   if (low.includes("people:")) extra.push("owner", "owns", "people");
@@ -2531,17 +2521,16 @@ function rewriteQuery(q) {
   for (const w of base) {
     for (const a of aliasesOf(w)) extra.push(a);
   }
-  if (/\bsmarthands?\b/.test(ql) && !ql.includes("smart")) extra.push("smart", "hands");
-  if (ql.includes("always use https") || ql.includes("https")) extra.push("smarthandstn", "redirect");
+  if (ql.includes("always use https") || ql.includes("https")) extra.push("redirect");
   if (["not done", "not finished", "still not", "not fixed"].some((x) => ql.includes(x)))
     extra.push("pending", "not-done");
   if (ql.includes("until when") || ql.includes("until")) extra.push("until", "dec");
-  if (ql.includes("on card") || ql.includes("kyle's card")) extra.push("on-card", "card");
+  if (ql.includes("on card") || /\b\w+'s card\b/.test(ql)) extra.push("on-card", "card");
   if (ql.includes("still open")) extra.push("still-open", "sitemap", "resubmit");
   if (ql.includes("product") && (ql.includes("live") || ql.includes("deploy")))
-    extra.push("smarthands", "smart", "hands", "live");
+    extra.push("live");
   if (ql.includes("ga4") || ql.includes("been created"))
-    extra.push("ga4", "tracking", "not-created", "waiting_on_kyle");
+    extra.push("ga4", "tracking", "not-created", "waiting-on");
   const seen = /* @__PURE__ */ new Set();
   const expanded = [];
   for (const t of [...base, ...extra.flatMap((e) => terms(e)), ...extra]) {

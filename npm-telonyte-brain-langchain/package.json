@@ -1,6 +1,6 @@
 {
   "name": "@telonyte/brain-langchain",
-  "version": "2.2.6",
+  "version": "2.2.7",
   "description": "LangChain retriever adapter for B.R.A.I.N. V1.",
   "type": "module",
   "main": "./src/index.js",
@@ -25,7 +25,7 @@
     "directory": "npm-telonyte-brain-langchain"
   },
   "dependencies": {
-    "@telonyte/brain": "^2.2.6"
+    "@telonyte/brain": "^2.2.7"
   },
   "peerDependencies": {
     "@langchain/core": ">=0.3.0"

@@ -1,6 +1,6 @@
 {
   "name": "@telonyte/brain",
-  "version": "2.2.6",
+  "version": "2.2.7",
   "description": "B.R.A.I.N. V1 client for Node.js. Answers come from a local synced copy when there is one, else from the host.",
   "type": "module",
   "main": "index.js",
